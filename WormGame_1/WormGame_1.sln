@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WormGame_1", "WormGame_1.csproj", "{153FFF77-6E8D-4199-B1B9-048915F32B2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{153FFF77-6E8D-4199-B1B9-048915F32B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{153FFF77-6E8D-4199-B1B9-048915F32B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{153FFF77-6E8D-4199-B1B9-048915F32B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{153FFF77-6E8D-4199-B1B9-048915F32B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {418F07B2-A1E1-47F3-A682-E864800DA5BB}
+	EndGlobalSection
+EndGlobal
