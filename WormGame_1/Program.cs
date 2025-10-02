@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Diagnostics;
 
 namespace WormGame_1
 {
-
     //키입력을 위한 열거형
     public enum Direction { Up, Down, Left, Right }
-
 
     //포지션값
     class Position
@@ -49,6 +48,7 @@ namespace WormGame_1
             wormBody.Add(new Position(10, 10));
             wormBody.Add(new Position(9, 10));
             wormBody.Add(new Position(8, 10));
+        
 
             //지렁이의 초기 진행 방향 설정
             Direction = Direction.Right;
@@ -87,19 +87,31 @@ namespace WormGame_1
                     newHead = new Position(exisHead._positionX + 1, exisHead._positionY);
                     break;
 
-                //디폴트 값 추가
+                //디폴트 값
                 default:
                     newHead = exisHead;
                     break;
             }
 
-            //만약 포인트 a가 0보다 크고 포인트 a가 가로폭 세로폭 보다 크거나 같을때
-            //게임이 종료
+            //경계선 충돌 판정
+            //만약 포인트 a가 0보다 크고 포인트 a가 가로폭 세로폭 보다 크거나 같을때 게임 오버
             if (newHead._positionX < 0 || newHead._positionX >= Console.WindowWidth
                || newHead._positionY < 0 || newHead._positionY >= Console.WindowHeight)
             {
                 alive = false;
                 return;
+            }
+
+
+            //자기 몸을 충돌하면 게임 오버
+
+            // 모든 조건을 충족하는 지 확인, 만약에 포지션 xy와 지렁이 머리 포지션 xy가 같으면 죽음 판정
+            if (wormBody.Any(posi => posi._positionX == newHead._positionX &&
+            posi._positionY == newHead._positionY))
+            {
+                alive = false;
+                return;
+
             }
 
             //인덱스 요소 추가
@@ -123,10 +135,10 @@ namespace WormGame_1
             }
         }
 
-
         //사과를 먹으면 몸이 길어지는 메소드 추가 예정
         public void EatingApple()
         {
+
 
         }
     }
@@ -138,7 +150,6 @@ namespace WormGame_1
         //필드
         private Position location;
         private Random random = new Random();
-
 
         //포지션에 대한 프로퍼티
         public Position Location
@@ -207,23 +218,37 @@ namespace WormGame_1
                     switch (key)
                     {
                         //화살표 위 입력시 디렉션 업 (웜 > 무브 메소드에 있음)
+                        //반대 방향을 빠르게 누르면 바로 죽는 버그 발견)
+                        //if 조건문으로 방지 
                         case ConsoleKey.UpArrow:
-                            worm.Direction = Direction.Up;
+                            if (worm.Direction != Direction.Down)
+                            {
+                                worm.Direction = Direction.Up;
+                            }
                             break;
 
                         //화살표 아래 입력시 디렉션 다운 (웜 > 무브 메소드에 있음)
                         case ConsoleKey.DownArrow:
-                            worm.Direction = Direction.Down;
+                            if(worm.Direction != Direction.Up)
+                            {
+                                worm.Direction = Direction.Down;
+                            }
                             break;
 
                         //화살표 왼쪽 입력시 디렉션 레프트 (웜 > 무브 메소드에 있음)
                         case ConsoleKey.LeftArrow:
-                            worm.Direction = Direction.Left;
+                            if(worm.Direction != Direction.Right)
+                            {
+                                worm.Direction = Direction.Left;
+                            }
                             break;
 
                         //화살표 오른쪽 입력시 디렉션 라이트 (웜 > 무브 메소드에 있음)
                         case ConsoleKey.RightArrow:
-                            worm.Direction = Direction.Right;
+                            if(worm.Direction != Direction.Left)
+                            {
+                                worm.Direction = Direction.Right;
+                            }
                             break;
                     }
                 }
@@ -247,6 +272,61 @@ namespace WormGame_1
             display.GameOver(); //while 반복문에서 빠져나가면 게임오버
             Console.ReadKey();
         }
+
+        public void StartTitle ()
+        {
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("                           ┌───────────────────────────────────────────────────────────┐");
+            Console.WriteLine("                           │                                                           │");
+            Console.WriteLine("                           │      ■■■     ■■■   ■■■■■■■■■   ■■■■■■■■■■■   ■■■■  ■■■■   │");
+            Console.WriteLine("                           │     ■■■■ ■■ ■■■  ■■■     ■■■  ■■■     ■■■   ■■■■■■■■■■    │");
+            Console.WriteLine("                           │     ■■■■■■■■■■■  ■■■     ■■■  ■■■     ■■■  ■■■■■■■■■■■    │");
+            Console.WriteLine("                           │     ■■■■■■■■■■■  ■■■     ■■■  ■■■■■■■■■    ■■■■ ■■ ■■■    │");
+            Console.WriteLine("                           │     ■■■■  ■■■■    ■■■■■■■■■   ■■■    ■■■■■ ■■■     ■■■    │");
+            Console.WriteLine("                           │                                                           │");
+            Console.WriteLine("                           │       ■■■■■■■■■■    ■■■■■■■    ■■■■  ■■■■   ■■■■■■■■■■    │");
+            Console.WriteLine("                           │      ■■■         ■■■    ■■■   ■■■■■■■■■■  ■■■■            │");
+            Console.WriteLine("                           │      ■■    ■■■■ ■■■■    ■■■■ ■■■■■■■■■■■  ■■■■■■■■■       │");
+            Console.WriteLine("                           │      ■■■    ■■■ ■■■■■■■ ■■■■ ■■■■ ■■ ■■■  ■■■■            │");
+            Console.WriteLine("                           │        ■■■■■■■  ■■■■    ■■■■ ■■■     ■■■   ■■■■■■■■■■     │");
+            Console.WriteLine("                           │                                                           │");
+            Console.WriteLine("                           └───────────────────────────────────────────────────────────┘");
+            Console.WriteLine("");
+            Console.WriteLine("                                            ┌─────────────────────────┐");
+            Console.WriteLine("                                            │  Enter key : Game Start │");
+            Console.WriteLine("                                            │                         │");
+            Console.WriteLine("                                            │  Enter key :    Exit    │");
+            Console.WriteLine("                                            └─────────────────────────┘");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+
+            while (true)
+            {
+                // 입력 처리
+                if (Console.KeyAvailable)
+                {
+                    var key = Console.ReadKey(true).Key;
+                    switch (key)
+                    {
+                        case ConsoleKey.Enter:
+                            GamePlay();
+                            break;
+                        case ConsoleKey.Escape:
+                            Console.Clear();
+                            Console.WriteLine("게임을 종료합니다");
+                            Thread.Sleep(100); // 100ms 대기
+                            break;
+                    }
+                }
+            }
+        }
+
 
         //게임오버시 출력됨
         public void GameOver()
@@ -272,29 +352,58 @@ namespace WormGame_1
             Console.WriteLine("                           │                                                           │");
             Console.WriteLine("                           └───────────────────────────────────────────────────────────┘");
             Console.WriteLine("");
+            Console.WriteLine("                                            ┌─────────────────────────┐");
+            Console.WriteLine("                                            │  Enter key :  Restart   │");
+            Console.WriteLine("                                            │                         │");
+            Console.WriteLine("                                            │  BackSpace :   Title    │");
+            Console.WriteLine("                                            │                         │");
+            Console.WriteLine("                                            │     ESC    :   Exit     │");
+            Console.WriteLine("                                            └─────────────────────────┘");
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
+
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    var key = Console.ReadKey(true).Key;
+                    switch (key)
+                    {
+                        case ConsoleKey.Enter:
+                            GamePlay();
+                            break;
+                        case ConsoleKey.Backspace:
+                            Console.Clear();
+                            StartTitle();
+                            Console.WriteLine("게임 타이틀로 돌아갑니다");
+                            Thread.Sleep(100); // 100ms 대기
+                            break;
+                        case ConsoleKey.Escape:
+                            Console.Clear();
+                            Thread.Sleep(100); // 100ms 대기
+                            Console.WriteLine("게임을 종료합니다");
+                            break;
+
+                    }
+                }
+            }
         }
     }
 
-
-
     //메인문
-    class Program
+    class Programw
     {
         static void Main(string[] args)
         {
             Console.Title = "Warm Game";
             Console.CursorVisible = false;
             Display display = new Display();
-            display.GamePlay();
+
+            display.StartTitle();
+
+            
         }
     }
 }
