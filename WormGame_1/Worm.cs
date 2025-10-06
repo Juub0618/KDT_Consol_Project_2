@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace WormGame_1
 {
+    //키입력을 위한 열거형
+    public enum Direction { Up, Down, Left, Right }
+
     //지렁이 클래스
     class Worm
     {
@@ -19,6 +22,7 @@ namespace WormGame_1
         public List<Position> WormBody
         {
             get { return wormBody; }
+            set { wormBody = value; }
         }
 
 
@@ -26,7 +30,6 @@ namespace WormGame_1
         public Worm()
         {
             wormBody = new List<Position>();
-
             //초반 지렁이 몸체 3개로 시작
             wormBody.Add(new Position(10, 10));
             wormBody.Add(new Position(9, 10));
@@ -76,8 +79,8 @@ namespace WormGame_1
             }
 
             //경계선에 몸을 충돌하면 게임 오버
-            if (newHead._positionX < 0 || newHead._positionX >= Console.WindowWidth
-               || newHead._positionY < 0 || newHead._positionY >= Console.WindowHeight)
+            if (newHead._positionX < 0 || newHead._positionX >= 31 // 테두리 위 아래 넓이
+               || newHead._positionY < 0 || newHead._positionY >= 28) // 테두리 좌우 넓이
             {
                 alive = false;
                 return;
@@ -127,7 +130,7 @@ namespace WormGame_1
             foreach (var point in wormBody)
             {
                 //커서의 위치 설정 (포인트 X값, 포인트 Y값)
-                Console.SetCursorPosition(point._positionX, point._positionY);
+                Console.SetCursorPosition(point._positionX*2, point._positionY);
 
                 //지렁이 생김새
                 Console.Write("▣");

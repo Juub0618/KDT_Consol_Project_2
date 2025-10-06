@@ -10,7 +10,7 @@ namespace WormGame_1
         //필드
         private Position location;
         private Random random = new Random();
-        
+
         //프로퍼티
         public Position Location
         {
@@ -19,7 +19,7 @@ namespace WormGame_1
         }
 
         //사과 생성 매소드
-        public Position AppleCreate(List<Position> wBody)
+        public Position AppleCreate(List<Position> wBody, int mapW, int mapH)
         {
             Position loca;
             bool pile;
@@ -28,9 +28,9 @@ namespace WormGame_1
             //무조건 하라
             do
             {
-                //cmd 너비와 높이 내에서 사과 랜덤 생성
-                int x = random.Next(0, Console.WindowWidth);
-                int y = random.Next(0, Console.WindowHeight);
+                //설정한 너비와 높이 값 내에서 사과 랜덤 생성
+                int x = random.Next(mapW +10, mapH /2);
+                int y = random.Next(mapW +10, mapH /2);
                 loca = new Position(x, y);
 
                 //모든 값을 충족하는지 확인 (포지션 X, 로케이션 X가 같음 && 포지션 Y와 로케이션 Y가 같음)
@@ -46,7 +46,7 @@ namespace WormGame_1
         public void AppleDrew()
         {
             //커서의 위치 설정 (로케이션 X값, 로케이션 Y값)
-            Console.SetCursorPosition(location._positionX, location._positionY);
+            Console.SetCursorPosition(location._positionX*2, location._positionY);
 
             Console.ForegroundColor = ConsoleColor.Red; //폰트 색상 빨간색으로 변경\
             Console.Write("♥"); //사과의 생김새
@@ -56,10 +56,10 @@ namespace WormGame_1
         //사과 누적 스코어 출력 메소드
         public void AppleScore(int Count)
         {
-                Console.ForegroundColor = ConsoleColor.Red; //폰트색 빨간색
-                Console.SetCursorPosition(50, 0); //폰트 위치
-                Console.WriteLine($" ♥ x {Count}"); //출력
-                Console.ResetColor(); //폰트 색상 초기화
+            Console.ForegroundColor = ConsoleColor.Red; //폰트색 빨간색
+            Console.SetCursorPosition(50, 1); //폰트 위치
+            Console.WriteLine($" ♥ x {Count}"); //출력
+            Console.ResetColor(); //폰트 색상 초기화
         }
     }
 }

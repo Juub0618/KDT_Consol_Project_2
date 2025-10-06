@@ -1,4 +1,6 @@
-﻿namespace WormGame_1
+﻿
+
+namespace WormGame_1
 {
     //포지션값
     class Position
