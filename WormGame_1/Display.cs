@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WormGame_1
 {
@@ -58,6 +57,8 @@ namespace WormGame_1
             Console.WriteLine("2. 사과를 먹으면 지렁이 성장");
             Console.SetCursorPosition(75, 21);
             Console.WriteLine("3. 벽에 부딛히면 게임 오버");
+            Console.SetCursorPosition(75, 23);
+            Console.WriteLine("4. 자기 몸에 부딛히면 게임 오버");
 
             //입력값 처리, 테두리 출력
             while (true)
