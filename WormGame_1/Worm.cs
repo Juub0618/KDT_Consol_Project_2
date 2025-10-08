@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace WormGame_1
 {
@@ -24,7 +25,6 @@ namespace WormGame_1
             get { return wormBody; }
             set { wormBody = value; }
         }
-
 
         //지렁이 생성자
         public Worm()
@@ -78,9 +78,9 @@ namespace WormGame_1
                     break;
             }
 
-            //경계선에 몸을 충돌하면 게임 오버
-            if (newHead._positionX < 0 || newHead._positionX >= 31 // 테두리 위 아래 넓이
-               || newHead._positionY < 0 || newHead._positionY >= 28) // 테두리 좌우 넓이
+            //테두리에 충돌하면 게임 오버
+            if (newHead._positionX <= 0 || newHead._positionX >= 30 || //맵 영역 X 값
+                newHead._positionY <= 2 || newHead._positionY >= 27)   //맵 영역 Y 값
             {
                 alive = false;
                 return;
@@ -97,10 +97,17 @@ namespace WormGame_1
             //새로운 머리를 몸통 리스트에 추가
             wormBody.Insert(0, newHead);
 
-            //성장 중이 아니면 꼬리 제거
+
+            //꼬리의 출력이 길어지지 않게 조절
+            var tail = wormBody.Last();
+            Console.SetCursorPosition(tail._positionX * 2, tail._positionY);
+            Console.Write(" ");
+
+
+            //성장하지 않는 경우 몸 조절
             if (!_grow)
             {
-                //앞으로 나아가도록 보여야하니까 인덱스 카운트 -1로 제거
+                //지렁이의 카운트를 1씩 감소 시켜 계속 증가하는것을 방지
                 wormBody.RemoveAt(wormBody.Count - 1);
             }
             else
@@ -109,18 +116,70 @@ namespace WormGame_1
             }
         }
 
-        //몸이 성장하는 메소드
+        // 지렁이 방향 입력 처리 (조건문으로 반대 방향 입력 방지)
+        public void WormMovingKeyInput()
+        {
+            Display display = new Display();
+
+            if (Console.KeyAvailable)
+            {
+                var key = Console.ReadKey(true).Key;
+                switch (key)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (Direction != Direction.Down)
+                        {
+                            Direction = Direction.Up;
+                        }
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                        if (Direction != Direction.Up)
+                        {
+                            Direction = Direction.Down;
+                        }
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                        if (Direction != Direction.Right)
+                        {
+                            Direction = Direction.Left;
+                        }
+                        break;
+
+                    case ConsoleKey.RightArrow:
+                        if (Direction != Direction.Left)
+                        {
+                            Direction = Direction.Right;
+                        }
+                        break;
+
+
+                    //게임 중 타이틀 화면으로 돌아가는 키
+                    case ConsoleKey.Backspace:
+                        Console.Clear();
+                        display.ShowTitle();
+                        break;
+
+
+                    //게임 중 게임 종료하는 키
+                    case ConsoleKey.Escape:
+                        Console.Clear();
+                        display.MapOutlineDraw();
+                        Console.SetCursorPosition(21, 14);
+                        Console.WriteLine("게임을 종료합니다");
+                        Thread.Sleep(1000);
+                        Console.Clear();
+                        Environment.Exit(0);
+                        break;
+                }
+            }
+        }
+
+        //지렁이 성장 메소드
         public void Grow(int Count)
         {
-            //만약에 (논리 부정, 즉, _grow trou면?)
-            if (!_grow)
-            {
-                _grow = true;
-            }
-            else
-            {
-                _grow = false;
-            }
+            _grow = true;
         }
 
         //지렁이 출력 메소드
@@ -129,8 +188,8 @@ namespace WormGame_1
             //지렁이 몸체 출력
             foreach (var point in wormBody)
             {
-                //커서의 위치 설정 (포인트 X값, 포인트 Y값)
-                Console.SetCursorPosition(point._positionX*2, point._positionY);
+                //커서의 위치 설정 (포인트 X값 (폰트의 크기에 맞게 *2, 포인트 Y값)
+                Console.SetCursorPosition(point._positionX * 2, point._positionY);
 
                 //지렁이 생김새
                 Console.Write("▣");

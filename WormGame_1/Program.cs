@@ -8,10 +8,10 @@ namespace WormGame_1
         static void Main(string[] args)
         {
             Console.Title = "Worm Game"; //CMD 네임
-            Console.CursorVisible = false; //
-         
+            Console.CursorVisible = false; //커서 숨기기
+            
             Display display = new Display();
-            display.Title();
+            display.ShowTitle();
         }
     }
 }
